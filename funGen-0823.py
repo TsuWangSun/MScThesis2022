@@ -5,16 +5,16 @@ import numpy as np
 import time
 
 
+# load device
 rm = pyvisa.ResourceManager()
 rm.list_resources()
+fgen2=rm.open_resource('ASRL4::INSTR') # may change 
 
-
-fgen2=rm.open_resource('ASRL4::INSTR')
-# mm.write("*IDN?")
-# mm.read_bytes(1)
+# check device
 fgen2.query('*IDN?')
 
-def genfun(fgen,freq,amp,waveform="SIN",dco=0): # SIN, SQU, RAMP, NOIS, USER
+# generate function in certain mode
+def genfun(fgen,freq,amp,waveform="SIN",dco=0): # waveform: SIN, SQU, RAMP, NOIS, USER
     """ freq: 0.1-25M Hz
         amp: -5-5 Vpp
         waveform: SIN, SQU, RAMP, NOIS, USER
@@ -27,6 +27,7 @@ def genfun(fgen,freq,amp,waveform="SIN",dco=0): # SIN, SQU, RAMP, NOIS, USER
 
 #genfun(fgen2,1732,1.618,"SIN",0)
 
+# reset and initiate device
 def resett(fgen):
     fgen.write("OUTPut OFF")
     fgen.write("*RST")
@@ -42,7 +43,7 @@ def funinit(fgen):
     print("init")
 
 
-
+# report function status on screen
 def funReport(fgen):
     fgen.query("SOUR1:APPL?")
     print(
@@ -55,7 +56,7 @@ def funReport(fgen):
 
 #funReport(fgen2)
 
-
+# report function status on screen with time remains
 def funReportT(fgen,t):
     fgen.query("SOUR1:APPL?")
     print(
@@ -68,7 +69,7 @@ def funReportT(fgen,t):
 
 #funReportT(fgen2,123)
 
-
+# format time
 def secToclock(tf): # secs
     tf=int(tf)
     mins, secs = divmod(tf, 60)
@@ -78,7 +79,7 @@ def secToclock(tf): # secs
 # tf=t*60
 # secToclock(120)
 
-
+# generate function with time countdown
 def genfunTime(fgen, duration, freqI, freqF, ampI, ampF, waveform="SIN"):
     """duration: sec"""
     tsteps=duration #*60
@@ -100,6 +101,7 @@ def genfunTime(fgen, duration, freqI, freqF, ampI, ampF, waveform="SIN"):
 
 #genfunTime(fgen2,10,10,10,0.05,2.5)
 
+# time in minute
 def genfunTimeM(fgen, duration, freqI, freqF, ampI, ampF, waveform="SIN"):
     """duration: min"""
     tsteps=duration*60
@@ -120,7 +122,7 @@ def genfunTimeM(fgen, duration, freqI, freqF, ampI, ampF, waveform="SIN"):
 #genfunTimeM(fgen2,1,1234,1434,1.3,2.5)
 
 
-
+# test function
 def genfunTimeMT(fgen, duration, freqI, freqF, ampI, ampF, waveform="SIN", init=False):
     """duration: min"""
     tsteps=duration*60
@@ -177,7 +179,7 @@ def timeReportT(fgen,mins):
 
 
 
-
+# execution instance
 
 # electroformation0823 one-sided 5 mg/mL, 2.5 uL 1kHz 2.5 Vpp
 start_time = time.time()
@@ -193,15 +195,7 @@ print(time.strftime("%H:%M:%S", time.localtime()))
 print("total %s mins..." % ((time.time() - start_time)/60))
 
 
-
-
-
-
-
-
-
-
-# test
+# test instance
 start_time = time.time()
 print(time.strftime("%H:%M:%S", time.localtime()))
 
@@ -214,7 +208,7 @@ print("total %s mins..." % ((time.time() - start_time)/60))
 
 
 
-
+# execution record
 ################
 >>> # electroformation0819 one-sided 5 mg/mL, 2.5 uL 1kHz 2.5 Vpp
 >>> start_time = time.time()
