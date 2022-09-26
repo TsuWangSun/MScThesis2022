@@ -8,7 +8,7 @@
 This document is the python code used to controll Arbitrary Function Generator from GW Instek, Taiwan, in the master's thesis of Tsu-Wang Sun.
 
 
-## required packages
+## package requirements
 
 - pyvisa
 - numpy
